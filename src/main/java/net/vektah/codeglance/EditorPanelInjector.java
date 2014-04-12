@@ -131,15 +131,24 @@ public class EditorPanelInjector implements FileEditorManagerListener {
 			}
 		}
 
-		GlancePanel panel;
 		for (FileEditor editor: unseen) {
-			panel = panels.get(editor);
-			panel.onClose();
-			uninject(editor);
-			panels.remove(editor);
+			removePanelFrom(editor);
 		}
 	}
 
 	@Override
 	public void selectionChanged(FileEditorManagerEvent fileEditorManagerEvent) { }
+
+	public void dispose() {
+		for (FileEditor editor : FileEditorManager.getInstance(project).getAllEditors()) {
+			removePanelFrom(editor);
+		}
+	}
+
+	private void removePanelFrom(FileEditor editor) {
+		GlancePanel panel = panels.get(editor);
+		panel.onClose();
+		uninject(editor);
+		panels.remove(editor);
+	}
 }

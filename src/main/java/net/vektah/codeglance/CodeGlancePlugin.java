@@ -29,6 +29,7 @@ import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
+import com.intellij.util.messages.MessageBusConnection;
 import net.vektah.codeglance.render.TaskRunner;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +42,7 @@ public class CodeGlancePlugin implements ProjectComponent {
 	private TaskRunner runner = new TaskRunner();
 	private Thread runnerThread = new Thread(runner);
 	private EditorPanelInjector injector;
+	private MessageBusConnection busConnection;
 
 	public CodeGlancePlugin(Project project) {
 		this.project = project;
@@ -49,12 +51,15 @@ public class CodeGlancePlugin implements ProjectComponent {
 
 	public void initComponent() {
 		runnerThread.start();
-		project.getMessageBus().connect().subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, injector);
+		busConnection = project.getMessageBus().connect();
+		busConnection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, injector);
 		logger.debug("CodeGlance initialized");
 	}
 
 	public void disposeComponent() {
 		runner.stop();
+		busConnection.disconnect();
+		injector.dispose();
 	}
 
 	@NotNull public String getComponentName() {

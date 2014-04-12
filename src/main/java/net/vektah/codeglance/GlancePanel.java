@@ -25,7 +25,6 @@
 
 package net.vektah.codeglance;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.FoldRegion;
@@ -68,8 +67,8 @@ public class GlancePanel extends JPanel implements VisibleAreaListener {
 	private Boolean updatePending = false;
 	private boolean dirty = false;
 	private CoordinateHelper coords = new CoordinateHelper();
-	private ConfigService configService = ServiceManager.getService(ConfigService.class);
-	private Config config;
+	private ConfigService configService = new ConfigService(); //ServiceManager.getService(ConfigService.class);
+	private Config config = new Config();
 	private int lastFoldCount = -1;
 	private Color viewportColor;
 
@@ -134,7 +133,7 @@ public class GlancePanel extends JPanel implements VisibleAreaListener {
 	}
 
 	private void readConfig() {
-		config = configService.getState();
+//		config = configService.getState();
 
 		coords.setPixelsPerLine(config.pixelsPerLine);
 		viewportColor = Color.decode("#" + config.viewportColor);
