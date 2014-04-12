@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="CodeGlance:jar">
+    <output-path>$PROJECT_DIR$/classes/artifacts/CodeGlance_jar</output-path>
+    <root id="archive" name="CodeGlance.jar">
+      <element id="module-output" name="CodeGlance" />
+    </root>
+  </artifact>
+</component>
